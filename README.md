@@ -26,6 +26,10 @@ We opted for PowerShell DSC since we use PowerShell heavily anyway and have no e
 - Contributor access to the resources
 - Deployment permissions to the cluster
 
+## Getting started
+
+You will want to clone this repo so that you can run the install script and have the helm chart since I haven't publihsed it anywhere yet. I have however pushed the docker image to docker hub, so you wont have to build anything unless you want to do so.
+
 ## Running the installer
 
 Start by running [install.ps1](https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/install.ps1), this will add a function that you can call from PowerShell: `Deploy-PrometheusWindowsExporter`.
