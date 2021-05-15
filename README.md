@@ -25,3 +25,11 @@ There are a few ways to install software on a VM scale set in Azure. The most co
 Custom image is a rather cumbersome process of maintaining the image where as AKS typically provides base OS updates, so this wouldn't be ideal. CSE is actually perfect, so perfect that this is how AKS delivers its software stack (kubelet, nssm, azure CNI), *but* a vm scale set can only have *one* CSE, DANG! 
 
 We opted for PowerShell DSC since we use PowerShell heavily anyway and have no experience with other provisioners.
+
+## Running the installer
+
+Start by running [install.ps1](https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/install.ps1), this will add a function that you can call from PowerShell: `Deploy-PrometheusWindowsExporter`.
+
+```powershell
+Deploy-PrometheusWindowsExporter -subscription "" -resourceGroup "";
+```
