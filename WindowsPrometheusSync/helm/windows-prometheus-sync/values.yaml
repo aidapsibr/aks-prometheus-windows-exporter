@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: 
+  repository: aidapsibr/windows-prometheus-sync
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart version.
-  tag: 
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
