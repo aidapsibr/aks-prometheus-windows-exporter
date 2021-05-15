@@ -1,5 +1,5 @@
 # installs powershell dsc on all windows vmss
-function Deploy-Powershell-DSC([string]$subscription, [string]$resourceGroup, [bool]$forceUpdate = $false)
+function Deploy-Powershell-DSC-AKS([string]$subscription, [string]$resourceGroup, [bool]$forceUpdate = $false)
 {
     $ErrorActionPreference = "Stop";
     $PSDefaultParameterValues['*:ErrorAction']='Stop';
