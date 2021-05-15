@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Docker": {
+      "commandName": "Docker"
+    },
+    "WindowsPrometheusSync": {
+      "commandName": "Project"
+    }
+  }
+}
