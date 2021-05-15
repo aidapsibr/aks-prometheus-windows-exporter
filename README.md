@@ -13,3 +13,15 @@ Well, we can do a lot actually, but we have to piece it together ourselves for t
 - Prometheus *[and optionally Grafana]*
 - Contributor access to the resources
 - Deployment permissions to the cluster
+
+## How do we install software?
+There are a few ways to install software on a VM scale set in Azure. The most common are:
+
+- custom image
+- Custom Script Extension (CSE)
+- PowerShell DSC
+- other provisioners such as Chef 
+
+Custom image is a rather cumbersome process of maintaining the image where as AKS typically provides base OS updates, so this wouldn't be ideal. CSE is actually perfect, so perfect that this is how AKS delivers its software stack (kubelet, nssm, azure CNI), *but* a vm scale set can only have *one* CSE, DANG! 
+
+We opted for PowerShell DSC since we use PowerShell heavily anyway and have no experience with other provisioners.
