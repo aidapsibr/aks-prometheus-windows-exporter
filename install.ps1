@@ -10,10 +10,9 @@ function Deploy-PrometheusWindowsExporter([string]$subscription, [string]$resour
     $scaleSets = az vmss list --subscription $subscription --resource-group $resourceGroup | ConvertFrom-Json;
 
     # grab all the windows vmss in the rg
-    # install only on vmss that don't have powershell dsc installed unless $forceUpdate is true
     $vmssNamesToRun = $scaleSets.Where({
         $_.virtualMachineProfile.osProfile.linuxConfiguration -eq $null `
-        -and ($forceUpdate -or $_.virtualMachineProfile.extensionProfile.extensions.where({$_.name -eq "Microsoft.Powershell.DSC"}).Count -eq 0)}) | `
+        -and ($_.virtualMachineProfile.extensionProfile.extensions.where({$_.name -eq "Microsoft.Powershell.DSC"}).Count -eq 0)}) | `
         % Name;
 
     if($vmssNamesToRun.Length -gt 0)
