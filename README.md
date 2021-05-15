@@ -7,13 +7,6 @@ Windows in Kuberenetes at present runs in `Process isolation` (which is good for
 ## What *can* we do?
 Well, we can do a lot actually, but we have to piece it together ourselves for the time being. Cloud providers, in this case Azure, build on top of IaaS primitives like Virtual Machine Scale Sets. We can directly interact with those to install some software on each host `node`. That along with a way to publicize the nodes' scraping port to Prometheus is all we need, really.
 
-## Prerequites
-
-- AKS cluster with Windows nodes
-- Prometheus *[and optionally Grafana]*
-- Contributor access to the resources
-- Deployment permissions to the cluster
-
 ## How do we install software?
 There are a few ways to install software on a VM scale set in Azure. The most common are:
 
@@ -26,10 +19,19 @@ Custom image is a rather cumbersome process of maintaining the image where as AK
 
 We opted for PowerShell DSC since we use PowerShell heavily anyway and have no experience with other provisioners.
 
+## Prerequites
+
+- AKS cluster with Windows nodes
+- Prometheus *[and optionally Grafana]*
+- Contributor access to the resources
+- Deployment permissions to the cluster
+
 ## Running the installer
 
 Start by running [install.ps1](https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/install.ps1), this will add a function that you can call from PowerShell: `Deploy-PrometheusWindowsExporter`.
 
+Then you can run it for a particular cluster. 
+> The resource group should be the node resource group, not the resource group the cluster resource is in.
 ```powershell
 Deploy-PrometheusWindowsExporter -subscription "" -resourceGroup "";
 ```
