@@ -12,7 +12,7 @@ namespace WindowsPrometheusSync
         /// <summary>
         /// Name of node
         /// </summary>
-        /// <example>akswin1000000</example>
+        /// <example>aksd1000000</example>
         public string Name { get; }
 
         /// <summary>

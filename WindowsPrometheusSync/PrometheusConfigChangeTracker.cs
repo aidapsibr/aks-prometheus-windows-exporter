@@ -184,7 +184,7 @@ namespace WindowsPrometheusSync
         /// - job_name: prometheus-windows-node
         ///   static_configs:
         ///   - targets:
-        ///     - akswin1000000:9100
+        ///     - aksd1000000:9100
         ///     labels:
         ///       agentpool: win1
         ///       beta_kubernetes_io_arch: amd64
@@ -192,17 +192,16 @@ namespace WindowsPrometheusSync
         ///       beta_kubernetes_io_os: windows
         ///       failure_domain_beta_kubernetes_io_region: westus2
         ///       failure_domain_beta_kubernetes_io_zone: westus2-1
-        ///       kubernetes_azure_com_cluster: sk-sandbox-westus2-aks-nodes-rg
+        ///       kubernetes_azure_com_cluster: test-cluster
         ///       kubernetes_azure_com_node_image_version: AKSWindows-2019-17763.1577.201111
         ///       kubernetes_azure_com_role: agent
         ///       kubernetes_io_arch: amd64
-        ///       kubernetes_io_hostname: akswin1000000
+        ///       kubernetes_io_hostname: aksd1000000
         ///       kubernetes_io_os: windows
         ///       kubernetes_io_role: agent
         ///       node_role_kubernetes_io_agent: ''
         ///       node_kubernetes_io_instance_type: Standard_D8as_v4
         ///       node_kubernetes_io_windows_build: 10.0.17763
-        ///       node_skykick_io_product: backup
         ///       storageprofile: managed
         ///       storagetier: Premium_LRS
         ///       topology_kubernetes_io_region: westus2
