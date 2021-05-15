@@ -5,7 +5,7 @@ Metrics on Kubernetes are quite streamlined with a typical prometheus and grafan
 Windows in Kuberenetes at present runs in `Process isolation` (which is good for metrics!), but doesn't allow `priveleged` containers (bad!). This is why so few monitoring solutions support Windows and even if they do, it's relatively limited to what it can gather. The typical mechanism for gathering metrics is with a `daemonset` so that one `pod` will be placed on each `node`. This `pod` would gather all the metrics for it's assigned `node`, but again this doesn't really work on Windows.
 
 ## What *can* we do?
-Well, we can do a lot actually, but we have to piece it together ourselves for the time being. Cloud providers, in this case Azure, build on top of IaaS primitives like Virtual Machine Scale Sets. We can directly interact with those to install some software on each host. That along with a way to publicize the nodes' scraping port to Prometheus is all we need, really.
+Well, we can do a lot actually, but we have to piece it together ourselves for the time being. Cloud providers, in this case Azure, build on top of IaaS primitives like Virtual Machine Scale Sets. We can directly interact with those to install some software on each host `node`. That along with a way to publicize the nodes' scraping port to Prometheus is all we need, really.
 
 ## Prerequites
 
