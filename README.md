@@ -35,3 +35,5 @@ Then you can run it for a particular cluster.
 ```powershell
 Deploy-PrometheusWindowsExporter -subscription "" -resourceGroup "";
 ```
+## Deploying the Prometheus endpoint publisher
+At this point, all of our Windows nodes can gather stats and are listening on 9100, but Prometheus doesn't know that... We ended up building a small app and deployment that just identitifies all of the windows nodes and lets Prometheus know about them.
