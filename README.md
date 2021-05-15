@@ -25,6 +25,7 @@ We opted for PowerShell DSC since we use PowerShell heavily anyway and have no e
 - Prometheus *[and optionally Grafana]*
 - Contributor access to the resources
 - Deployment permissions to the cluster
+- HELM CLI
 
 ## Getting started
 
@@ -40,4 +41,8 @@ Then you can run it for a particular cluster.
 Deploy-PrometheusWindowsExporter -subscription "" -resourceGroup "";
 ```
 ## Deploying the Prometheus endpoint publisher
-At this point, all of our Windows nodes can gather stats and are listening on 9100, but Prometheus doesn't know that... We ended up building a small app and deployment that just identitifies all of the windows nodes and lets Prometheus know about them.
+At this point, all of our Windows nodes can gather stats and are listening on 9100, but Prometheus doesn't know that... We ended up building a small app and deployment that just identitifies all of the windows nodes and lets Prometheus know about them. In the following snippet, we install the chart in our cluster. We recommend creating a namespace or using the namespace that Prometheus is in (monitoring for us).
+
+```bash
+helm install windows-prometheus-sync ./WindowsPrometheusSync/helm/windows-prometheus-sync/ --namespace monitoring
+```
