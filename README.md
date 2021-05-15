@@ -1,4 +1,4 @@
-# Running Prometheus Windows Exporter in Windows AKS Node pools
+# Prometheus Windows Exporter in Windows AKS Node pools
 Metrics on Kubernetes are quite streamlined with a typical prometheus and grafana installation, but if you need to run Windows in your clusters for any reason things don't go so smoothly. This will be a bit of a how-to guide on getting some metrics you can start to build dashboards with or setup alerts, etc.
 
 ## Why doesn't this work out of the box?
