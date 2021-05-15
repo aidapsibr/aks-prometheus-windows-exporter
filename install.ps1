@@ -1,5 +1,5 @@
 # installs powershell dsc on all windows vmss
-function Deploy-Powershell-DSC-AKS([string]$subscription, [string]$resourceGroup, [bool]$forceUpdate = $false)
+function Deploy-PrometheusWindowsExporter([string]$subscription, [string]$resourceGroup)
 {
     $ErrorActionPreference = "Stop";
     $PSDefaultParameterValues['*:ErrorAction']='Stop';
