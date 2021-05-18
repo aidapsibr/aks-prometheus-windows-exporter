@@ -1,0 +1,408 @@
+{
+  "columns": [],
+  "datasource": "Prometheus",
+  "fieldConfig": {
+    "defaults": {},
+    "overrides": []
+  },
+  "fontSize": "80%",
+  "gridPos": {
+    "h": 6,
+    "w": 24,
+    "x": 0,
+    "y": 18
+  },
+  "id": 23763571993,
+  "links": [
+    {
+      "targetBlank": true,
+      "title": "Windows Node Details",
+      "url": "http://10.97.186.132:3000/d/Kdh0OoSGz2/windows_exporter-for-prometheus-dashboard?orgId=1"
+    }
+  ],
+  "pageSize": null,
+  "showHeader": true,
+  "sort": {
+    "col": 31,
+    "desc": true
+  },
+  "styles": [
+    {
+      "$$hashKey": "object:1557",
+      "alias": "operating system",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "product",
+      "preserveFormat": false,
+      "sanitize": false,
+      "thresholds": [],
+      "type": "string",
+      "unit": "short",
+      "valueMaps": []
+    },
+    {
+      "$$hashKey": "object:1570",
+      "alias": "hostname",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "link": false,
+      "linkTooltip": "",
+      "linkUrl": "",
+      "mappingType": 1,
+      "pattern": "hostname",
+      "preserveFormat": false,
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "$$hashKey": "object:1609",
+      "alias": "instance",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "link": true,
+      "linkTargetBlank": false,
+      "linkTooltip": "${__cell_4}",
+      "linkUrl": "/d/Kdh0OoSGz/?var-job=${__cell_5}&var-hostname=All&var-instance=${__cell_4}",
+      "mappingType": 1,
+      "pattern": "instance",
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "$$hashKey": "object:1622",
+      "alias": "CPUs",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #B",
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "$$hashKey": "object:1635",
+      "alias": "RAM",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": null,
+      "mappingType": 1,
+      "pattern": "Value #C",
+      "thresholds": [],
+      "type": "number",
+      "unit": "bytes"
+    },
+    {
+      "$$hashKey": "object:2635",
+      "alias": "uptime",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": null,
+      "mappingType": 1,
+      "pattern": "Value #D",
+      "thresholds": [
+        "259200",
+        "432000"
+      ],
+      "type": "number",
+      "unit": "s"
+    },
+    {
+      "$$hashKey": "object:1809",
+      "alias": "C:/ usage rate",
+      "align": "auto",
+      "colorMode": "cell",
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #E",
+      "thresholds": [
+        "60",
+        "80"
+      ],
+      "type": "number",
+      "unit": "percentunit"
+    },
+    {
+      "$$hashKey": "object:1821",
+      "alias": "Most used partition%",
+      "align": "auto",
+      "colorMode": "cell",
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #F",
+      "thresholds": [
+        "60",
+        "80"
+      ],
+      "type": "number",
+      "unit": "percentunit"
+    },
+    {
+      "$$hashKey": "object:2286",
+      "alias": "processes",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "link": false,
+      "mappingType": 1,
+      "pattern": "Value #G",
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "$$hashKey": "object:2297",
+      "alias": "services",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #H",
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "$$hashKey": "object:3599",
+      "alias": "CPU usage",
+      "align": "auto",
+      "colorMode": "cell",
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #I",
+      "thresholds": [
+        "80",
+        "90"
+      ],
+      "type": "number",
+      "unit": "percent"
+    },
+    {
+      "$$hashKey": "object:3610",
+      "alias": "Memory usage",
+      "align": "auto",
+      "colorMode": "cell",
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #J",
+      "thresholds": [
+        "80",
+        "90"
+      ],
+      "type": "number",
+      "unit": "percent"
+    },
+    {
+      "$$hashKey": "object:5929",
+      "alias": "frequency",
+      "align": "auto",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Value #K",
+      "thresholds": [],
+      "type": "number",
+      "unit": "rothz"
+    },
+    {
+      "$$hashKey": "object:1311",
+      "alias": "",
+      "align": "right",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "decimals": 2,
+      "pattern": "/.*/",
+      "thresholds": [],
+      "type": "hidden",
+      "unit": "short"
+    }
+  ],
+  "targets": [
+    {
+      "expr": "windows_os_info{job=~\"$job\"} * on(instance) group_right(product) windows_cs_hostname",
+      "legendFormat": "",
+      "interval": "",
+      "exemplar": true,
+      "format": "table",
+      "instant": true,
+      "refId": "Hostname",
+      "hide": false
+    },
+    {
+      "expr": "time() - windows_system_system_up_time{job=~\"$job\"}",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "Uptime",
+      "hide": false
+    },
+    {
+      "expr": "windows_cs_logical_processors{job=~\"$job\"} - 0",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "Logical processor count"
+    },
+    {
+      "expr": "avg by (instance) (windows_cpu_core_frequency_mhz{job=~\"$job\"})",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "CPU Freq"
+    },
+    {
+      "expr": "100 - (avg by (instance) (irate(windows_cpu_time_total{job=~\"$job\",mode=\"idle\"}[2m])) * 100)",
+      "legendFormat": "CPU usage",
+      "interval": "",
+      "exemplar": true,
+      "format": "table",
+      "instant": true,
+      "refId": "CPU usage"
+    },
+    {
+      "exemplar": true,
+      "expr": "windows_cs_physical_memory_bytes{job=~\"$job\"} - 0",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "Total RAM"
+    },
+    {
+      "expr": "100 - 100 * windows_os_physical_memory_free_bytes{job=~\"$job\"} / windows_cs_physical_memory_bytes{job=~\"$job\"}",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "Memory usage",
+      "refId": "Memory usage"
+    },
+    {
+      "expr": "1 - (windows_logical_disk_free_bytes{job=~\"$job\",volume=~\"C:\"}/windows_logical_disk_size_bytes{job=~\"$job\",volume=~\"C:\"})",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "disk usage C drive"
+    },
+    {
+      "expr": "max by (instance) (1-windows_logical_disk_free_bytes{job=~\"$job\"}/windows_logical_disk_size_bytes{job=~\"$job\"})",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "most used partition disk percent"
+    },
+    {
+      "expr": "windows_os_processes{job=~\"$job\"}",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "Process count"
+    },
+    {
+      "expr": "sum by (instance) (windows_service_state{job=~\"$job\",state=~\"running\"})",
+      "format": "table",
+      "instant": true,
+      "interval": "",
+      "legendFormat": "",
+      "refId": "Running Services"
+    }
+  ],
+  "timeFrom": null,
+  "timeShift": null,
+  "title": "Windows Server Resource Overview",
+  "transform": "table",
+  "type": "table-old"
+}
