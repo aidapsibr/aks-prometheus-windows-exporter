@@ -46,3 +46,6 @@ At this point, all of our Windows nodes can gather stats and are listening on 91
 ```bash
 helm install windows-prometheus-sync ./WindowsPrometheusSync/helm/windows-prometheus-sync/ --namespace monitoring
 ```
+
+Sample node usage table built in Grafana from this process: https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/grafana-windows-server-table-panel.json
+![image](https://user-images.githubusercontent.com/621605/118737301-6d189780-b7f9-11eb-96f3-a77269a7d4ea.png)
