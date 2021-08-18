@@ -1,3 +1,7 @@
+This is a fork of the [original](https://github.com/aidapsibr/aks-prometheus-windows-exporter). This fork contains a version that has been customised for the way we interact with Azure and AKS.
+
+---
+
 # Prometheus Windows Exporter in Windows AKS Node pools
 Metrics on Kubernetes are quite streamlined with a typical prometheus and grafana installation, but if you need to run Windows in your clusters for any reason things don't go so smoothly. This will be a bit of a how-to guide on getting some metrics you can start to build dashboards with or setup alerts, etc.
 
