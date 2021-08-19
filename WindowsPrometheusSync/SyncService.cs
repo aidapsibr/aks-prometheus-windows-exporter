@@ -19,7 +19,7 @@ namespace WindowsPrometheusSync
         private static readonly Regex InvalidLabelCharacters = new(@"[^\w_]", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
         private static readonly TimeSpan PollDelay = TimeSpan.FromMinutes(1);
 
-        private const string secretDataPropertyName = "additional-scrape-configs.yaml";
+        private const string SecretDataPropertyName = "additional-scrape-configs.yaml";
 
         private bool _disposed;
         private CancellationTokenSource _cts;
@@ -121,7 +121,7 @@ namespace WindowsPrometheusSync
 
             var prometheusServerConfigMap = await _kubernetesClientWrapper.GetPrometheusScrapeConfigSecretAsync(cancellationToken);
             
-            var tracker = new PrometheusConfigChangeTracker(Encoding.UTF8.GetString(prometheusServerConfigMap.Data[secretDataPropertyName]));
+            var tracker = new PrometheusConfigChangeTracker(Encoding.UTF8.GetString(prometheusServerConfigMap.Data[SecretDataPropertyName]));
 
             var windowsNodeScrapeConfigs = tracker.List();
 
@@ -140,7 +140,7 @@ namespace WindowsPrometheusSync
 
             if (tracker.NeedsUpdate)
             {
-                prometheusServerConfigMap.Data[secretDataPropertyName] = Encoding.UTF8.GetBytes(tracker.ToString());
+                prometheusServerConfigMap.Data[SecretDataPropertyName] = Encoding.UTF8.GetBytes(tracker.ToString());
                 await _kubernetesClientWrapper
                     .UpdatePrometheusScrapeConfigSecretAsync(prometheusServerConfigMap, cancellationToken);
             }
