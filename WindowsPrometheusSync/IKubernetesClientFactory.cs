@@ -21,10 +21,13 @@ namespace WindowsPrometheusSync
 
         private KubernetesClientConfiguration GetConfig()
         {
+            const string localKubeConfigPath = @"";
+            const string localKubeContext = "";
+            
             if (UseLocalConfig)
             {
                 // Use this when debugging locally
-                return KubernetesClientConfiguration.BuildConfigFromConfigFile(@"C:\Users\corey.caldwell\.kube\config","sk-sandbox-westus2-aks-admin");
+                return KubernetesClientConfiguration.BuildConfigFromConfigFile(localKubeConfigPath,localKubeContext);
             }
 
             return KubernetesClientConfiguration.BuildDefaultConfig();
