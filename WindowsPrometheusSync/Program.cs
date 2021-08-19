@@ -63,12 +63,12 @@ namespace WindowsPrometheusSync
 
     internal class ReadinessHealthCheck : IHealthCheck
     {
-        public bool StartupTaskCompleted { get; set; } = false;
+        public bool ServiceIsReady { get; set; }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Some Readiness check
             Console.WriteLine("Readiness health check executed.");
-            if (StartupTaskCompleted)
+            if (ServiceIsReady)
             {
                 return Task.FromResult(
                     HealthCheckResult.Healthy("The startup task is finished."));

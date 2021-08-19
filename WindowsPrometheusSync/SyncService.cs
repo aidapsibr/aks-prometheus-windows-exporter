@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using k8s.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -27,14 +28,16 @@ namespace WindowsPrometheusSync
 
         private readonly IKubernetesClientWrapper _kubernetesClientWrapper;
         private readonly ILogger<SyncService> _logger;
-        
+        private readonly IHost _host;
+
         /// <summary>
         /// CTOR
         /// </summary>
-        public SyncService(IKubernetesClientWrapper kubernetesClientWrapper, ILogger<SyncService> logger)
+        public SyncService(IKubernetesClientWrapper kubernetesClientWrapper, ILogger<SyncService> logger, IHost host)
         {
             _kubernetesClientWrapper = kubernetesClientWrapper;
             _logger = logger;
+            _host = host;
         }
 
         /// <summary>
@@ -89,12 +92,16 @@ namespace WindowsPrometheusSync
         /// </summary>
         private async Task LoopSyncAsync(CancellationToken cancellationToken)
         {
+            var readinessCheck = _host.Services.GetRequiredService<ReadinessHealthCheck>();
+            
             do
             {
                 try
                 {
                     await SyncWithWindowsNodesAsync(cancellationToken);
                     await Task.Delay(PollDelay, cancellationToken);
+                    // if the first sync job succeeds without exception, mark the service as ready
+                    readinessCheck.ServiceIsReady = true;
                 }
                 catch (OperationCanceledException)
                 {
