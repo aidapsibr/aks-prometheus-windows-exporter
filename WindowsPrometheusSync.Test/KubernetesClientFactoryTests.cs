@@ -6,7 +6,7 @@ namespace WindowsPrometheusSync.Test
     public class KubernetesClientFactoryTests
     {
         /// <summary>
-        /// CYA test to hopefully keep us from checking this in with the local config enabled
+        ///     CYA test to hopefully keep us from checking this in with the local config enabled
         /// </summary>
         [Test]
         public void EnsureWereNotUsingLocalK8SConfig()

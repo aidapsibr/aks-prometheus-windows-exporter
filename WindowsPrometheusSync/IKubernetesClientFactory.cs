@@ -10,7 +10,7 @@ namespace WindowsPrometheusSync
     internal class KubernetesClientFactory : IKubernetesClientFactory
     {
         /// <summary>
-        /// If you leave this true unit tests will fail to remind us to put this back
+        ///     If you leave this true unit tests will fail to remind us to put this back
         /// </summary>
         internal bool UseLocalConfig => false;
 
@@ -23,12 +23,10 @@ namespace WindowsPrometheusSync
         {
             const string localKubeConfigPath = @"";
             const string localKubeContext = "";
-            
+
             if (UseLocalConfig)
-            {
                 // Use this when debugging locally
-                return KubernetesClientConfiguration.BuildConfigFromConfigFile(localKubeConfigPath,localKubeContext);
-            }
+                return KubernetesClientConfiguration.BuildConfigFromConfigFile(localKubeConfigPath, localKubeContext);
 
             return KubernetesClientConfiguration.BuildDefaultConfig();
         }

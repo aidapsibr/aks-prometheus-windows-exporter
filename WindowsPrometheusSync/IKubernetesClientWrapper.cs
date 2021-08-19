@@ -8,26 +8,27 @@ using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Rest;
 
 namespace WindowsPrometheusSync
 {
     /// <summary>
-    /// Wraps up the I/O needed for the sync process
+    ///     Wraps up the I/O needed for the sync process
     /// </summary>
     public interface IKubernetesClientWrapper
     {
         /// <summary>
-        /// Get some basic info on all windows nodes currently in the cluster
+        ///     Get some basic info on all windows nodes currently in the cluster
         /// </summary>
         Task<IList<V1Node>> GetWindowsNodesAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Gets the prometheus scrape config secret so we can maintain the list of scrape jobs for each windows node
+        ///     Gets the prometheus scrape config secret so we can maintain the list of scrape jobs for each windows node
         /// </summary>
         Task<V1Secret> GetPrometheusScrapeConfigSecretAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Updates the secret
+        ///     Updates the secret
         /// </summary>
         Task<V1Secret> UpdatePrometheusScrapeConfigSecretAsync(V1Secret secret,
             CancellationToken cancellationToken);
@@ -35,17 +36,17 @@ namespace WindowsPrometheusSync
 
     public class KubernetesClientWrapper : IKubernetesClientWrapper, IDisposable
     {
-        private bool _initialized;
-        private Kubernetes _client;
-        private bool _disposed;
-
         private static string _secretNamespace;
         private static string _secretName;
 
         private readonly IKubernetesClientFactory _kubernetesClientFactory;
         private readonly ILogger<KubernetesClientWrapper> _logger;
+        private Kubernetes _client;
+        private bool _disposed;
+        private bool _initialized;
 
-        public KubernetesClientWrapper(IKubernetesClientFactory kubernetesClientFactory, ILogger<KubernetesClientWrapper> logger, IConfiguration configuration)
+        public KubernetesClientWrapper(IKubernetesClientFactory kubernetesClientFactory,
+            ILogger<KubernetesClientWrapper> logger, IConfiguration configuration)
         {
             _kubernetesClientFactory = kubernetesClientFactory;
             _logger = logger;
@@ -53,15 +54,10 @@ namespace WindowsPrometheusSync
             _secretNamespace = configuration.GetValue<string>("MONITORING_NAMESPACE");
         }
 
-        private void Init()
+        public void Dispose()
         {
-            if (_initialized)
-            {
-                return;
-            }
-
-            _client = _kubernetesClientFactory.Create();
-            _initialized = true;
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public async Task<IList<V1Node>> GetWindowsNodesAsync(CancellationToken cancellationToken)
@@ -92,7 +88,7 @@ namespace WindowsPrometheusSync
                 result = await _client.ReadNamespacedSecretAsync(_secretName, _secretNamespace,
                     cancellationToken: cancellationToken);
             }
-            catch (Microsoft.Rest.HttpOperationException ex)
+            catch (HttpOperationException ex)
                 when (ex.Response.StatusCode == HttpStatusCode.NotFound)
             {
                 try
@@ -101,13 +97,13 @@ namespace WindowsPrometheusSync
                     result = await _client.ReadNamespacedSecretAsync(_secretName, "default",
                         cancellationToken: cancellationToken);
                 }
-                catch (Microsoft.Rest.HttpOperationException ex2)
+                catch (HttpOperationException ex2)
                     when (ex.Response.StatusCode == HttpStatusCode.NotFound)
                 {
                     _logger.LogWarning(ex2, "Unable to access scrape config secret");
                 }
             }
-            catch (Microsoft.Rest.HttpOperationException ex)
+            catch (HttpOperationException ex)
                 when (ex.Response.StatusCode == HttpStatusCode.Forbidden)
             {
                 _logger.LogCritical(ex, @$"
@@ -133,21 +129,24 @@ Content:
             return result;
         }
 
-        public Task<V1Secret> UpdatePrometheusScrapeConfigSecretAsync(V1Secret secret, CancellationToken cancellationToken)
+        public Task<V1Secret> UpdatePrometheusScrapeConfigSecretAsync(V1Secret secret,
+            CancellationToken cancellationToken)
         {
             Init();
 
             return _client.ReplaceNamespacedSecretAsync(
-                secret, 
-                secret.Name(), 
+                secret,
+                secret.Name(),
                 secret.Namespace(),
                 cancellationToken: cancellationToken);
         }
 
-        public void Dispose()
+        private void Init()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (_initialized) return;
+
+            _client = _kubernetesClientFactory.Create();
+            _initialized = true;
         }
 
         // Protected implementation of Dispose pattern.
@@ -156,10 +155,7 @@ Content:
             if (_disposed)
                 return;
 
-            if (disposing)
-            {
-                _client?.Dispose();
-            }
+            if (disposing) _client?.Dispose();
 
             _disposed = true;
         }

@@ -5,30 +5,17 @@ using System.Linq;
 namespace WindowsPrometheusSync
 {
     /// <summary>
-    /// Basic info of a node needed for the sync process
+    ///     Basic info of a node needed for the sync process
     /// </summary>
     public class NodeInfo
     {
-        /// <summary>
-        /// Name of node
-        /// </summary>
-        /// <example>aksd1000000</example>
-        public string Name { get; }
-
-        /// <summary>
-        /// List of the labels currently on the node
-        /// </summary>
-        public IReadOnlyDictionary<string, string> Labels { get; }
-
-        private readonly string _stringValue;   
         private readonly int _hashCode;
+
+        private readonly string _stringValue;
 
         internal NodeInfo(string name, IDictionary<string, string> labels)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Can not be null or empty", nameof(name));
-            }
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Can not be null or empty", nameof(name));
 
             Name = name;
             Labels = labels as IReadOnlyDictionary<string, string>;
@@ -41,16 +28,23 @@ namespace WindowsPrometheusSync
             {
                 labelsHash = (int) 2166136261;
                 if (labels?.Any() == true)
-                {
                     foreach (var label in labels)
-                    {
                         labelsHash = (labelsHash * 16777619) ^ (label.Key, label.Value).GetHashCode();
-                    }
-                }
             }
 
             _hashCode = (Name, labelsHash).GetHashCode();
         }
+
+        /// <summary>
+        ///     Name of node
+        /// </summary>
+        /// <example>aksd1000000</example>
+        public string Name { get; }
+
+        /// <summary>
+        ///     List of the labels currently on the node
+        /// </summary>
+        public IReadOnlyDictionary<string, string> Labels { get; }
 
         public override string ToString()
         {

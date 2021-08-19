@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 [assembly: InternalsVisibleTo("WindowsPrometheusSync.Test")]
 
 namespace WindowsPrometheusSync
-{ 
+{
     public class Program
     {
         public static async Task Main(string[] args)
@@ -28,12 +28,10 @@ namespace WindowsPrometheusSync
             }
         }
 
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((_, config) =>
-                {
-                    config.AddEnvironmentVariables();
-                })
+        internal static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((_, config) => { config.AddEnvironmentVariables(); })
                 .ConfigureLogging(loggingBuilder =>
                 {
                     loggingBuilder.ClearProviders();
@@ -43,22 +41,24 @@ namespace WindowsPrometheusSync
                 {
                     services.AddSingleton<ReadinessHealthCheck>();
                     services.AddSingleton<LivenessHealthCheck>();
-                    
+
                     services.AddSingleton<IKubernetesClientFactory, KubernetesClientFactory>();
                     services.AddSingleton<IKubernetesClientWrapper, KubernetesClientWrapper>();
                     services.AddSingleton<SyncService>();
                     services.AddHostedService<SyncService>();
 
                     services.AddHealthChecks()
-                        .AddCheck<LivenessHealthCheck>("Liveness", HealthStatus.Degraded, new List<string>(){"Liveness"})
-                        .AddCheck<ReadinessHealthCheck>("Readiness", HealthStatus.Degraded, new List<string>{ "Readiness" });
-                    
+                        .AddCheck<LivenessHealthCheck>("Liveness", HealthStatus.Degraded, new List<string> {"Liveness"})
+                        .AddCheck<ReadinessHealthCheck>("Readiness", HealthStatus.Degraded,
+                            new List<string> {"Readiness"});
                 });
+        }
     }
 
     internal class LivenessHealthCheck : IHealthCheck
     {
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             // Some Liveness check
             Console.WriteLine("LivenessHealthCheck executed.");
@@ -69,15 +69,15 @@ namespace WindowsPrometheusSync
     internal class ReadinessHealthCheck : IHealthCheck
     {
         public bool ServiceIsReady { get; set; }
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             // Some Readiness check
             Console.WriteLine("Readiness health check executed.");
             if (ServiceIsReady)
-            {
                 return Task.FromResult(
                     HealthCheckResult.Healthy("The startup task is finished."));
-            }
             return Task.FromResult(
                 HealthCheckResult.Unhealthy("The startup task is still running."));
         }

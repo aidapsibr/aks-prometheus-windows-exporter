@@ -5,7 +5,8 @@ namespace WindowsPrometheusSync.Test
     [TestFixture(Category = "Unit")]
     public class ProgramTests
     {
-        [Test, Category("Unit")]
+        [Test]
+        [Category("Unit")]
         public void DependencyInjectionTest()
         {
             // Arrange
