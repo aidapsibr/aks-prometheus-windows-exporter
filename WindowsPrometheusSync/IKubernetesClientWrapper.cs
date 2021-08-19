@@ -38,8 +38,8 @@ namespace WindowsPrometheusSync
         private Kubernetes _client;
         private bool _disposed;
 
-        private const string SecretNamespace = "monitoring";
-        private const string SecretName = "kube-prometheus-stack-prometheus-scrape-confg";
+        private const string SecretNamespace = "sumologic";
+        private const string SecretName = "collection-kube-prometheus-prometheus-scrape-confg";
 
         private readonly IKubernetesClientFactory _kubernetesClientFactory;
         private readonly ILogger<KubernetesClientWrapper> _logger;
