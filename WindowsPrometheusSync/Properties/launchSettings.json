@@ -4,7 +4,11 @@
       "commandName": "Docker"
     },
     "WindowsPrometheusSync": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "MONITORING_NAMESPACE": "",
+        "SCRAPE_CONFIG_SECRET_NAME": ""
+      }
     }
   }
 }

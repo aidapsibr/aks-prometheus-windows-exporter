@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace WindowsPrometheusSync
@@ -38,16 +39,18 @@ namespace WindowsPrometheusSync
         private Kubernetes _client;
         private bool _disposed;
 
-        private const string SecretNamespace = "sumologic";
-        private const string SecretName = "collection-kube-prometheus-prometheus-scrape-confg";
+        private static string _secretNamespace;
+        private static string _secretName;
 
         private readonly IKubernetesClientFactory _kubernetesClientFactory;
         private readonly ILogger<KubernetesClientWrapper> _logger;
 
-        public KubernetesClientWrapper(IKubernetesClientFactory kubernetesClientFactory, ILogger<KubernetesClientWrapper> logger)
+        public KubernetesClientWrapper(IKubernetesClientFactory kubernetesClientFactory, ILogger<KubernetesClientWrapper> logger, IConfiguration configuration)
         {
             _kubernetesClientFactory = kubernetesClientFactory;
             _logger = logger;
+            _secretName = configuration.GetValue<string>("SCRAPE_CONFIG_SECRET_NAME");
+            _secretNamespace = configuration.GetValue<string>("MONITORING_NAMESPACE");
         }
 
         private void Init()
@@ -86,7 +89,7 @@ namespace WindowsPrometheusSync
 
             try
             {
-                result = await _client.ReadNamespacedSecretAsync(SecretName, SecretNamespace,
+                result = await _client.ReadNamespacedSecretAsync(_secretName, _secretNamespace,
                     cancellationToken: cancellationToken);
             }
             catch (Microsoft.Rest.HttpOperationException ex)
@@ -95,7 +98,7 @@ namespace WindowsPrometheusSync
                 try
                 {
                     // Check for prometheus server config in the default namespace as a failover
-                    result = await _client.ReadNamespacedSecretAsync(SecretName, "default",
+                    result = await _client.ReadNamespacedSecretAsync(_secretName, "default",
                         cancellationToken: cancellationToken);
                 }
                 catch (Microsoft.Rest.HttpOperationException ex2)
