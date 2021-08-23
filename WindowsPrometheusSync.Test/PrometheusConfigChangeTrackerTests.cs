@@ -11,7 +11,7 @@ namespace WindowsPrometheusSync.Test
         private const string ArtifactDirectory = "./test-artifacts/PrometheusConfigChangeTrackerTests/";
 
         private static readonly NodeInfo DefaultNodeInfo =
-            new NodeInfo(
+            new(
                 "nodename",
                 new Dictionary<string, string>(new[]
                 {

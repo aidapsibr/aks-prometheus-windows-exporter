@@ -48,9 +48,10 @@ namespace WindowsPrometheusSync
                     services.AddHostedService<SyncService>();
 
                     services.AddHealthChecks()
-                        .AddCheck<LivenessHealthCheck>("Liveness", HealthStatus.Degraded, new List<string> {"Liveness"})
+                        .AddCheck<LivenessHealthCheck>("Liveness", HealthStatus.Degraded,
+                            new List<string> { "Liveness" })
                         .AddCheck<ReadinessHealthCheck>("Readiness", HealthStatus.Degraded,
-                            new List<string> {"Readiness"});
+                            new List<string> { "Readiness" });
                 });
         }
     }

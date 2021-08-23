@@ -54,7 +54,7 @@ namespace WindowsPrometheusSync
                 .SingleOrDefault(x =>
                     x != null
                     && x.Children.ContainsKey(NodeTags.JobName)
-                    && x.Children[NodeTags.JobName] is YamlScalarNode {Value: JobNameValue});
+                    && x.Children[NodeTags.JobName] is YamlScalarNode { Value: JobNameValue });
             if (scrapeJob == null)
             {
                 NeedsUpdate = true;
@@ -214,7 +214,7 @@ namespace WindowsPrometheusSync
 
             var name = targetNode?.Value?.Split(':', 2).First();
             var labels = labelsContainerNode?.Children
-                .ToDictionary(x => ((YamlScalarNode) x.Key).Value, x => ((YamlScalarNode) x.Value).Value);
+                .ToDictionary(x => ((YamlScalarNode)x.Key).Value, x => ((YamlScalarNode)x.Value).Value);
 
             return string.IsNullOrWhiteSpace(name) ? null : new NodeInfo(name, labels);
         }

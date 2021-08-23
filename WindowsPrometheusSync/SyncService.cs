@@ -20,7 +20,9 @@ namespace WindowsPrometheusSync
         private const string SecretDataPropertyName = "additional-scrape-configs.yaml";
 
         // Labels names in the static_configs can only contain alphanumeric or underscore characters, we'll replace the others with underscore which is what prom does by default
-        private static readonly Regex InvalidLabelCharacters = new(@"[^\w_]", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        private static readonly Regex InvalidLabelCharacters = new(@"[^\w_]",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+
         private static readonly TimeSpan PollDelay = TimeSpan.FromMinutes(1);
         private readonly IHost _host;
 

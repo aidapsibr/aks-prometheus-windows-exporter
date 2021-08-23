@@ -26,7 +26,7 @@ namespace WindowsPrometheusSync
             int labelsHash;
             unchecked // Overflow is fine, just wrap
             {
-                labelsHash = (int) 2166136261;
+                labelsHash = (int)2166136261;
                 if (labels?.Any() == true)
                     foreach (var label in labels)
                         labelsHash = (labelsHash * 16777619) ^ (label.Key, label.Value).GetHashCode();
