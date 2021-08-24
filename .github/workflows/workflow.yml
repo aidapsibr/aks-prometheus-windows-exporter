@@ -28,7 +28,7 @@ jobs:
       - name: Download Windows Exporter MSI and zip aks_setup directory
         run: |
           mkdir -p ./aks_setup/dsc_resources
-          curl https://github.com/prometheus-community/windows_exporter/releases/download/v0.16.0/windows_exporter-0.16.0-amd64.msi -o ./aks_setup/dsc_resources/windows_exporter-0.16.0-amd64.msi
+          curl -L https://github.com/prometheus-community/windows_exporter/releases/download/v0.16.0/windows_exporter-0.16.0-amd64.msi -o ./aks_setup/dsc_resources/windows_exporter-0.16.0-amd64.msi
           zip -r aks_setup.zip aks_setup
           
       - name: Create Release and upload zipped aks_setup directory
