@@ -1,0 +1,37 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Download Windows Exporter MSI and zip aks_setup directory
+        run: |
+          mkdir -p ./aks_setup/dsc_resources
+          curl https://github.com/prometheus-community/windows_exporter/releases/download/v0.16.0/windows_exporter-0.16.0-amd64.msi -o ./aks_setup/dsc_resources/windows_exporter-0.16.0-amd64.msi
+          zip -r aks_setup.zip aks_setup
+          
+      - name: Create Release and upload zipped aks_setup directory
+        run: |
+          gh release create v0.0.${GITHUB_RUN_NUMBER}
+          gh release upload v0.0.${GITHUB_RUN_NUMBER} ./aks_setup.zip
