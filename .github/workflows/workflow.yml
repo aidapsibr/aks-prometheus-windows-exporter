@@ -33,6 +33,6 @@ jobs:
           
       - name: Create Release and upload zipped aks_setup directory
         run: |
-          gh auth login --with-token < `echo ${{ secrets.GITHUB_TOKEN }}`
+          gh auth login --with-token << `echo ${{ secrets.GITHUB_TOKEN }}`
           gh release create v0.0.${GITHUB_RUN_NUMBER}
           gh release upload v0.0.${GITHUB_RUN_NUMBER} ./aks_setup.zip
