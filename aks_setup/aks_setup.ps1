@@ -19,7 +19,7 @@ Configuration Setup
                 function Install-Windows-Exporter
                 {
                     msiexec /i `
-                        C:\PROGRA~1\WindowsPowerShell\Modules\sk_dsc_resources\windows_exporter-0.16.0-amd64.msi `
+                        C:\PROGRA~1\WindowsPowerShell\Modules\aks_setup\dsc_resources\windows_exporter-0.16.0-amd64.msi `
                         LISTEN_PORT=9100 `
                         ENABLED_COLLECTORS=cpu,cs,container,logical_disk,memory,net,os,service,system,tcp
                 }
