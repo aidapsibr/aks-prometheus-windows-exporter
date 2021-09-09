@@ -6,7 +6,7 @@ RUN powershell -Command \
     Expand-Archive -Path c:\nginx-1.21.3.zip -DestinationPath c:\ ; \
     Remove-Item c:\nginx-1.21.3.zip -Force
 
-WORKDIR /nginx-1.15.12
+WORKDIR /nginx-1.21.3
 
 RUN mkdir shell
 COPY edit-nginx.conf ./shell
