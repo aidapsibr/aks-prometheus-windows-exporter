@@ -1,13 +1,12 @@
 This is a fork of the [original](https://github.com/aidapsibr/aks-prometheus-windows-exporter). This fork contains a version that has been customised for the way we interact with Azure and AKS.
 
-Original README:
 ---
 
 # Prometheus Windows Exporter in Windows AKS Node pools
 Metrics on Kubernetes are quite streamlined with a typical prometheus and grafana installation, but if you need to run Windows in your clusters for any reason things don't go so smoothly. This will be a bit of a how-to guide on getting some metrics you can start to build dashboards with or setup alerts, etc.
 
 ## Why doesn't this work out of the box?
-Windows in Kuberenetes at present runs in `Process isolation` (which is good for metrics!), but doesn't allow `priveleged` containers (bad!). This is why so few monitoring solutions support Windows and even if they do, it's relatively limited to what it can gather. The typical mechanism for gathering metrics is with a `daemonset` so that one `pod` will be placed on each `node`. This `pod` would gather all the metrics for it's assigned `node`, but again this doesn't really work on Windows.
+Windows in Kubernetes at present runs in `Process isolation` (which is good for metrics!), but doesn't allow `privileged` containers (bad!). This is why so few monitoring solutions support Windows and even if they do, it's relatively limited to what it can gather. The typical mechanism for gathering metrics is with a `daemonset` so that one `pod` will be placed on each `node`. This `pod` would gather all the metrics for it's assigned `node`, but again this doesn't really work on Windows.
 
 ## What *can* we do?
 Well, we can do a lot actually, but we have to piece it together ourselves for the time being. Cloud providers, in this case Azure, build on top of IaaS primitives like Virtual Machine Scale Sets. We can directly interact with those to install some software on each host `node`. That along with a way to publicize the nodes' scraping port to Prometheus is all we need, really.
@@ -24,33 +23,82 @@ Custom image is a rather cumbersome process of maintaining the image where as AK
 
 We opted for PowerShell DSC since we use PowerShell heavily anyway and have no experience with other provisioners.
 
-## Prerequites
+The extension can be installed in your cluster via a Terraform module similar to the below (Octopus staff can look in the Nautilus repo for our actual usage). You'll need to provide a `data` object that obtains the VMSS object in your cluster (see the `depends_on` below).
 
-- AKS cluster with Windows nodes
-- Prometheus *[and optionally Grafana]*
-- Contributor access to the resources
-- Deployment permissions to the cluster
-- HELM CLI
-
-## Getting started
-
-You will want to clone this repo so that you can run the install script and have the helm chart since I haven't publihsed it anywhere yet. I have however pushed the docker image to docker hub, so you wont have to build anything unless you want to do so.
-
-## Running the installer
-
-Start by running [install.ps1](https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/install.ps1), this will add a function that you can call from PowerShell: `Deploy-PrometheusWindowsExporter`.
-
-Then you can run it for a particular cluster. 
-> The resource group should be the node resource group, not the resource group the cluster resource is in.
-```powershell
-Deploy-PrometheusWindowsExporter -subscription "" -resourceGroup "";
+```yaml
+resource "azurerm_virtual_machine_scale_set_extension" "blue_windows_exporter" {
+  depends_on = [
+    data.azurerm_virtual_machine_scale_set.blue_bldwin
+  ]
+  name                         = "windows-exporter-dsc"
+  virtual_machine_scale_set_id = data.azurerm_virtual_machine_scale_set.blue_bldwin.id
+  publisher                    = "Microsoft.Powershell"
+  type                         = "DSC"
+  type_handler_version         = "2.80"
+  # ensure that the AKS custom script extension has already run
+  provision_after_extensions = ["vmssCSE"]
+  auto_upgrade_minor_version = false
+  settings = jsonencode({
+    wmfVersion = "latest"
+    configuration = {
+      url      = var.vmss_metrics_extension_zip
+      script   = "aks_setup"
+      function = "Setup"
+    }
+    privacy = {
+      dataEnabled = "Disable"
+    }
+  })
+}
 ```
-## Deploying the Prometheus endpoint publisher
-At this point, all of our Windows nodes can gather stats and are listening on 9100, but Prometheus doesn't know that... We ended up building a small app and deployment that just identitifies all of the windows nodes and lets Prometheus know about them. In the following snippet, we install the chart in our cluster. We recommend creating a namespace or using the namespace that Prometheus is in (monitoring for us).
+`var.vmss_metrics_extension_zip` should be a variable pointing to a downloadable ZIP of the contents of the `aks_setup` folder in this repo, with the `windows-exporter` .msi included. This repo has a GitHub Action set up to package the zip as a release on the repo. If you're using this in production, we recommend packaging it yourself.
 
-```bash
-helm install windows-prometheus-sync ./WindowsPrometheusSync/helm/windows-prometheus-sync/ --namespace monitoring
+The `aks_setup.psm1` file is a DSC module which installs the `windows-exporter` service on port 9100 and configures it with a number of metrics. If you need more or less metrics, you can change the options in that file.
+
+## Scraping the metrics
+
+To mimic the Daemonset approach used for Linux nodes, we provide a Dockerfile in the `nginx` folder which will create a Windows container that forwards to an IP defined in environment variables for the container. To use this in your cluster, you'll want to set up a Daemonset similar to this:
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: # a useful name
+  namespace: # your monitoring namespace
+  labels:
+    # labels that match any existing Prometheus ServiceMonitors
+spec:
+  selector:
+    matchLabels:
+      # labels that match any existing Prometheus ServiceMonitors
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        # labels that match any existing Prometheus ServiceMonitors
+    spec:
+      hostNetwork: false
+      containers:
+        - name: windows-metric-proxy
+          image: # your docker container location
+          imagePullPolicy: Always
+          ports:
+            - name: metrics
+              containerPort: 9100
+              protocol: TCP
+          env:
+            - name: PROXY_HOSTIP
+              # this will get the current node's internal IP and forward metric scrapes to the windows-exporter service running on the node
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: PROXY_PORT
+              value: '9100'
+      securityContext:
+        runAsNonRoot: false
+      nodeSelector:
+        kubernetes.io/os: windows
 ```
 
-Sample [node usage table](https://github.com/aidapsibr/aks-prometheus-windows-exporter/blob/main/grafana-windows-server-table-panel.json) built in Grafana from this process
-![image](https://user-images.githubusercontent.com/621605/118737301-6d189780-b7f9-11eb-96f3-a77269a7d4ea.png)
+Depending on your metric pipeline, you may need to to further configuration to ensure you're capturing `windows_*` metric targets, as this is what the `windows-exporter` exposes.
