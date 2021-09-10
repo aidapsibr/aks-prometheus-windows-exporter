@@ -25,7 +25,7 @@ We opted for PowerShell DSC since we use PowerShell heavily anyway and have no e
 
 The extension can be installed in your cluster via a Terraform module similar to the below (Octopus staff can look in the Nautilus repo for our actual usage). You'll need to provide a `data` object that obtains the VMSS object in your cluster (see the `depends_on` below).
 
-```yaml
+```terraform
 resource "azurerm_virtual_machine_scale_set_extension" "blue_windows_exporter" {
   depends_on = [
     data.azurerm_virtual_machine_scale_set.blue_bldwin
