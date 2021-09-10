@@ -101,4 +101,4 @@ spec:
         kubernetes.io/os: windows
 ```
 
-Depending on your metric pipeline, you may need to to further configuration to ensure you're capturing `windows_*` metric targets, as this is what the `windows-exporter` exposes.
+Depending on your metric pipeline, you may need to do further configuration to ensure you're capturing `windows_*` metric targets, as this is what the `windows-exporter` exposes.
