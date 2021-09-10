@@ -1,3 +1,0 @@
-﻿- job_name: prometheus-windows-node
-  static_configs: []
-...
