@@ -1,7 +1,0 @@
-﻿- job_name: prometheus-windows-node
-  static_configs:
-  - targets:
-    - nodename:9100
-    labels:
-      label_name: label_value
-...
